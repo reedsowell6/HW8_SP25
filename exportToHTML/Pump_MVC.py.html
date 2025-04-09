@@ -1,0 +1,209 @@
+<html>
+<head>
+<title>Pump_MVC.py</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.s0 { color: #7a7e85;}
+.s1 { color: #bcbec4;}
+.s2 { color: #cf8e6d;}
+.s3 { color: #bcbec4;}
+.s4 { color: #5f826b; font-style: italic;}
+.s5 { color: #6aab73;}
+.s6 { color: #2aacb8;}
+</style>
+</head>
+<body bgcolor="#1e1f22">
+<table CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#606060" >
+<tr><td><center>
+<font face="Arial, Helvetica" color="#000000">
+Pump_MVC.py</font>
+</center></td></tr></table>
+<pre><span class="s0"># region imorts</span>
+<span class="s2">import </span><span class="s1">numpy </span><span class="s2">as </span><span class="s1">np</span>
+<span class="s2">from </span><span class="s1">matplotlib</span><span class="s3">.</span><span class="s1">backends</span><span class="s3">.</span><span class="s1">backend_qt5agg </span><span class="s2">import </span><span class="s1">FigureCanvasQTAgg</span>
+<span class="s2">from </span><span class="s1">matplotlib</span><span class="s3">.</span><span class="s1">figure </span><span class="s2">import </span><span class="s1">Figure</span>
+<span class="s2">import </span><span class="s1">PyQt5</span><span class="s3">.</span><span class="s1">QtWidgets </span><span class="s2">as </span><span class="s1">qtw</span>
+
+<span class="s0"># importing from previous work on least squares fit</span>
+<span class="s2">from </span><span class="s1">LeastSquares </span><span class="s2">import </span><span class="s1">LeastSquaresFit_Class</span>
+
+
+<span class="s0"># endregion</span>
+
+<span class="s0"># region class definitions</span>
+<span class="s2">class </span><span class="s1">Pump_Model</span><span class="s3">():</span>
+    <span class="s4">&quot;&quot;&quot; 
+    This is the pump model.  It just stores data. 
+    &quot;&quot;&quot;</span>
+
+    <span class="s2">def </span><span class="s1">__init__</span><span class="s3">(</span><span class="s1">self</span><span class="s3">):  </span><span class="s0"># pump class constructor</span>
+        <span class="s0"># create some class variables for storing information</span>
+        <span class="s1">self</span><span class="s3">.</span><span class="s1">PumpName </span><span class="s3">= </span><span class="s5">&quot;&quot;</span>
+        <span class="s1">self</span><span class="s3">.</span><span class="s1">FlowUnits </span><span class="s3">= </span><span class="s5">&quot;&quot;</span>
+        <span class="s1">self</span><span class="s3">.</span><span class="s1">HeadUnits </span><span class="s3">= </span><span class="s5">&quot;&quot;</span>
+
+        <span class="s0"># place to store data from file</span>
+        <span class="s1">self</span><span class="s3">.</span><span class="s1">FlowData </span><span class="s3">= </span><span class="s1">np</span><span class="s3">.</span><span class="s1">array</span><span class="s3">([])</span>
+        <span class="s1">self</span><span class="s3">.</span><span class="s1">HeadData </span><span class="s3">= </span><span class="s1">np</span><span class="s3">.</span><span class="s1">array</span><span class="s3">([])</span>
+        <span class="s1">self</span><span class="s3">.</span><span class="s1">EffData </span><span class="s3">= </span><span class="s1">np</span><span class="s3">.</span><span class="s1">array</span><span class="s3">([])</span>
+
+        <span class="s0"># place to store coefficients for cubic fits</span>
+        <span class="s1">self</span><span class="s3">.</span><span class="s1">HeadCoefficients </span><span class="s3">= </span><span class="s1">np</span><span class="s3">.</span><span class="s1">array</span><span class="s3">([])</span>
+        <span class="s1">self</span><span class="s3">.</span><span class="s1">EfficiencyCoefficients </span><span class="s3">= </span><span class="s1">np</span><span class="s3">.</span><span class="s1">array</span><span class="s3">([])</span>
+
+        <span class="s0"># create two instances (objects) of least squares class</span>
+        <span class="s1">self</span><span class="s3">.</span><span class="s1">LSFitHead </span><span class="s3">= </span><span class="s1">LeastSquaresFit_Class</span><span class="s3">()</span>
+        <span class="s1">self</span><span class="s3">.</span><span class="s1">LSFitEff </span><span class="s3">= </span><span class="s1">LeastSquaresFit_Class</span><span class="s3">()</span>
+
+
+<span class="s2">class </span><span class="s1">Pump_Controller</span><span class="s3">():</span>
+    <span class="s2">def </span><span class="s1">__init__</span><span class="s3">(</span><span class="s1">self</span><span class="s3">):</span>
+        <span class="s1">self</span><span class="s3">.</span><span class="s1">Model </span><span class="s3">= </span><span class="s1">Pump_Model</span><span class="s3">()</span>
+        <span class="s1">self</span><span class="s3">.</span><span class="s1">View </span><span class="s3">= </span><span class="s1">Pump_View</span><span class="s3">()</span>
+
+    <span class="s0"># region functions to modify data of the model</span>
+    <span class="s2">def </span><span class="s1">ImportFromFile</span><span class="s3">(</span><span class="s1">self</span><span class="s3">, </span><span class="s1">data</span><span class="s3">):</span>
+        <span class="s4">&quot;&quot;&quot; 
+        This processes the list of strings in data to build the pump model 
+        :param data:  list of lines read from the file 
+        &quot;&quot;&quot;</span>
+        <span class="s0"># JES Missing Code: read PumpName from line 0</span>
+        <span class="s1">self</span><span class="s3">.</span><span class="s1">Model</span><span class="s3">.</span><span class="s1">PumpName </span><span class="s3">= </span><span class="s1">data</span><span class="s3">[</span><span class="s6">0</span><span class="s3">].</span><span class="s1">strip</span><span class="s3">()</span>
+
+        <span class="s0"># data[1] is presumably some extra info (hp, rpm) you can ignore or parse if you want</span>
+        <span class="s0"># data[2] is the units line</span>
+        <span class="s1">L </span><span class="s3">= </span><span class="s1">data</span><span class="s3">[</span><span class="s6">2</span><span class="s3">].</span><span class="s1">split</span><span class="s3">()</span>
+        <span class="s0"># JES Missing Code: store flow and head units from line 2</span>
+        <span class="s1">self</span><span class="s3">.</span><span class="s1">Model</span><span class="s3">.</span><span class="s1">FlowUnits </span><span class="s3">= </span><span class="s1">L</span><span class="s3">[</span><span class="s6">0</span><span class="s3">]</span>
+        <span class="s1">self</span><span class="s3">.</span><span class="s1">Model</span><span class="s3">.</span><span class="s1">HeadUnits </span><span class="s3">= </span><span class="s1">L</span><span class="s3">[</span><span class="s6">1</span><span class="s3">]</span>
+
+        <span class="s0"># extracts flow, head and efficiency data from lines 3 onward</span>
+        <span class="s1">self</span><span class="s3">.</span><span class="s1">SetData</span><span class="s3">(</span><span class="s1">data</span><span class="s3">[</span><span class="s6">3</span><span class="s3">:])</span>
+        <span class="s1">self</span><span class="s3">.</span><span class="s1">updateView</span><span class="s3">()</span>
+
+    <span class="s2">def </span><span class="s1">SetData</span><span class="s3">(</span><span class="s1">self</span><span class="s3">, </span><span class="s1">data</span><span class="s3">):</span>
+        <span class="s4">''' 
+        Expects three columns of data in an array of strings with space delimiter 
+        Parse line and build arrays. 
+        :param data: lines of text with &quot;flow head efficiency&quot; 
+        '''</span>
+        <span class="s0"># erase existing data</span>
+        <span class="s1">self</span><span class="s3">.</span><span class="s1">Model</span><span class="s3">.</span><span class="s1">FlowData </span><span class="s3">= </span><span class="s1">np</span><span class="s3">.</span><span class="s1">array</span><span class="s3">([])</span>
+        <span class="s1">self</span><span class="s3">.</span><span class="s1">Model</span><span class="s3">.</span><span class="s1">HeadData </span><span class="s3">= </span><span class="s1">np</span><span class="s3">.</span><span class="s1">array</span><span class="s3">([])</span>
+        <span class="s1">self</span><span class="s3">.</span><span class="s1">Model</span><span class="s3">.</span><span class="s1">EffData </span><span class="s3">= </span><span class="s1">np</span><span class="s3">.</span><span class="s1">array</span><span class="s3">([])</span>
+
+        <span class="s0"># parse new data</span>
+        <span class="s2">for </span><span class="s1">line </span><span class="s2">in </span><span class="s1">data</span><span class="s3">:</span>
+            <span class="s0"># JES Missing Code: parse the line into an array of strings</span>
+            <span class="s1">Cells </span><span class="s3">= </span><span class="s1">line</span><span class="s3">.</span><span class="s1">split</span><span class="s3">()</span>
+            <span class="s0"># remove any spaces and convert string to float</span>
+            <span class="s1">self</span><span class="s3">.</span><span class="s1">Model</span><span class="s3">.</span><span class="s1">FlowData </span><span class="s3">= </span><span class="s1">np</span><span class="s3">.</span><span class="s1">append</span><span class="s3">(</span><span class="s1">self</span><span class="s3">.</span><span class="s1">Model</span><span class="s3">.</span><span class="s1">FlowData</span><span class="s3">, </span><span class="s1">float</span><span class="s3">(</span><span class="s1">Cells</span><span class="s3">[</span><span class="s6">0</span><span class="s3">]))</span>
+            <span class="s1">self</span><span class="s3">.</span><span class="s1">Model</span><span class="s3">.</span><span class="s1">HeadData </span><span class="s3">= </span><span class="s1">np</span><span class="s3">.</span><span class="s1">append</span><span class="s3">(</span><span class="s1">self</span><span class="s3">.</span><span class="s1">Model</span><span class="s3">.</span><span class="s1">HeadData</span><span class="s3">, </span><span class="s1">float</span><span class="s3">(</span><span class="s1">Cells</span><span class="s3">[</span><span class="s6">1</span><span class="s3">]))</span>
+            <span class="s1">self</span><span class="s3">.</span><span class="s1">Model</span><span class="s3">.</span><span class="s1">EffData </span><span class="s3">= </span><span class="s1">np</span><span class="s3">.</span><span class="s1">append</span><span class="s3">(</span><span class="s1">self</span><span class="s3">.</span><span class="s1">Model</span><span class="s3">.</span><span class="s1">EffData</span><span class="s3">, </span><span class="s1">float</span><span class="s3">(</span><span class="s1">Cells</span><span class="s3">[</span><span class="s6">2</span><span class="s3">]))</span>
+
+        <span class="s0"># call least square fit for head and efficiency</span>
+        <span class="s1">self</span><span class="s3">.</span><span class="s1">LSFit</span><span class="s3">()</span>
+
+    <span class="s2">def </span><span class="s1">LSFit</span><span class="s3">(</span><span class="s1">self</span><span class="s3">):</span>
+        <span class="s4">'''Fit polynomials using Least Squares. (Head is typically quadratic or cubic, 
+           but your instructions say cubic for both. Adjust if needed.)'''</span>
+        <span class="s0"># Head</span>
+        <span class="s1">self</span><span class="s3">.</span><span class="s1">Model</span><span class="s3">.</span><span class="s1">LSFitHead</span><span class="s3">.</span><span class="s1">x </span><span class="s3">= </span><span class="s1">self</span><span class="s3">.</span><span class="s1">Model</span><span class="s3">.</span><span class="s1">FlowData</span>
+        <span class="s1">self</span><span class="s3">.</span><span class="s1">Model</span><span class="s3">.</span><span class="s1">LSFitHead</span><span class="s3">.</span><span class="s1">y </span><span class="s3">= </span><span class="s1">self</span><span class="s3">.</span><span class="s1">Model</span><span class="s3">.</span><span class="s1">HeadData</span>
+        <span class="s1">self</span><span class="s3">.</span><span class="s1">Model</span><span class="s3">.</span><span class="s1">LSFitHead</span><span class="s3">.</span><span class="s1">LeastSquares</span><span class="s3">(</span><span class="s6">2</span><span class="s3">)  </span><span class="s0"># If you truly want &quot;quadric&quot; for Head, use power=2</span>
+        <span class="s0"># Or if the instructions say &quot;cubic for head&quot; as well, use 3:</span>
+        <span class="s0"># self.Model.LSFitHead.LeastSquares(3)</span>
+
+        <span class="s0"># Efficiency</span>
+        <span class="s1">self</span><span class="s3">.</span><span class="s1">Model</span><span class="s3">.</span><span class="s1">LSFitEff</span><span class="s3">.</span><span class="s1">x </span><span class="s3">= </span><span class="s1">self</span><span class="s3">.</span><span class="s1">Model</span><span class="s3">.</span><span class="s1">FlowData</span>
+        <span class="s1">self</span><span class="s3">.</span><span class="s1">Model</span><span class="s3">.</span><span class="s1">LSFitEff</span><span class="s3">.</span><span class="s1">y </span><span class="s3">= </span><span class="s1">self</span><span class="s3">.</span><span class="s1">Model</span><span class="s3">.</span><span class="s1">EffData</span>
+        <span class="s1">self</span><span class="s3">.</span><span class="s1">Model</span><span class="s3">.</span><span class="s1">LSFitEff</span><span class="s3">.</span><span class="s1">LeastSquares</span><span class="s3">(</span><span class="s6">3</span><span class="s3">)  </span><span class="s0"># instructions specify cubic for efficiency</span>
+
+    <span class="s0"># endregion</span>
+
+    <span class="s0"># region functions interacting with view</span>
+    <span class="s2">def </span><span class="s1">setViewWidgets</span><span class="s3">(</span><span class="s1">self</span><span class="s3">, </span><span class="s1">w</span><span class="s3">):</span>
+        <span class="s1">self</span><span class="s3">.</span><span class="s1">View</span><span class="s3">.</span><span class="s1">setViewWidgets</span><span class="s3">(</span><span class="s1">w</span><span class="s3">)</span>
+
+    <span class="s2">def </span><span class="s1">updateView</span><span class="s3">(</span><span class="s1">self</span><span class="s3">):</span>
+        <span class="s1">self</span><span class="s3">.</span><span class="s1">View</span><span class="s3">.</span><span class="s1">updateView</span><span class="s3">(</span><span class="s1">self</span><span class="s3">.</span><span class="s1">Model</span><span class="s3">)</span>
+    <span class="s0"># endregion</span>
+
+
+<span class="s2">class </span><span class="s1">Pump_View</span><span class="s3">():</span>
+    <span class="s2">def </span><span class="s1">__init__</span><span class="s3">(</span><span class="s1">self</span><span class="s3">):</span>
+        <span class="s4">&quot;&quot;&quot; 
+        In this constructor, I create some QWidgets as placeholders until they get defined later. 
+        &quot;&quot;&quot;</span>
+        <span class="s1">self</span><span class="s3">.</span><span class="s1">LE_PumpName </span><span class="s3">= </span><span class="s1">qtw</span><span class="s3">.</span><span class="s1">QLineEdit</span><span class="s3">()</span>
+        <span class="s1">self</span><span class="s3">.</span><span class="s1">LE_FlowUnits </span><span class="s3">= </span><span class="s1">qtw</span><span class="s3">.</span><span class="s1">QLineEdit</span><span class="s3">()</span>
+        <span class="s1">self</span><span class="s3">.</span><span class="s1">LE_HeadUnits </span><span class="s3">= </span><span class="s1">qtw</span><span class="s3">.</span><span class="s1">QLineEdit</span><span class="s3">()</span>
+        <span class="s1">self</span><span class="s3">.</span><span class="s1">LE_HeadCoefs </span><span class="s3">= </span><span class="s1">qtw</span><span class="s3">.</span><span class="s1">QLineEdit</span><span class="s3">()</span>
+        <span class="s1">self</span><span class="s3">.</span><span class="s1">LE_EffCoefs </span><span class="s3">= </span><span class="s1">qtw</span><span class="s3">.</span><span class="s1">QLineEdit</span><span class="s3">()</span>
+        <span class="s1">self</span><span class="s3">.</span><span class="s1">ax </span><span class="s3">= </span><span class="s2">None</span>
+        <span class="s1">self</span><span class="s3">.</span><span class="s1">canvas </span><span class="s3">= </span><span class="s2">None</span>
+
+    <span class="s2">def </span><span class="s1">updateView</span><span class="s3">(</span><span class="s1">self</span><span class="s3">, </span><span class="s1">Model</span><span class="s3">):</span>
+        <span class="s4">&quot;&quot;&quot; 
+        Put model parameters in the widgets. 
+        :param Model: 
+        :return: 
+        &quot;&quot;&quot;</span>
+        <span class="s1">self</span><span class="s3">.</span><span class="s1">LE_PumpName</span><span class="s3">.</span><span class="s1">setText</span><span class="s3">(</span><span class="s1">Model</span><span class="s3">.</span><span class="s1">PumpName</span><span class="s3">)</span>
+        <span class="s1">self</span><span class="s3">.</span><span class="s1">LE_FlowUnits</span><span class="s3">.</span><span class="s1">setText</span><span class="s3">(</span><span class="s1">Model</span><span class="s3">.</span><span class="s1">FlowUnits</span><span class="s3">)</span>
+        <span class="s1">self</span><span class="s3">.</span><span class="s1">LE_HeadUnits</span><span class="s3">.</span><span class="s1">setText</span><span class="s3">(</span><span class="s1">Model</span><span class="s3">.</span><span class="s1">HeadUnits</span><span class="s3">)</span>
+        <span class="s1">self</span><span class="s3">.</span><span class="s1">LE_HeadCoefs</span><span class="s3">.</span><span class="s1">setText</span><span class="s3">(</span><span class="s1">Model</span><span class="s3">.</span><span class="s1">LSFitHead</span><span class="s3">.</span><span class="s1">GetCoeffsString</span><span class="s3">())</span>
+        <span class="s1">self</span><span class="s3">.</span><span class="s1">LE_EffCoefs</span><span class="s3">.</span><span class="s1">setText</span><span class="s3">(</span><span class="s1">Model</span><span class="s3">.</span><span class="s1">LSFitEff</span><span class="s3">.</span><span class="s1">GetCoeffsString</span><span class="s3">())</span>
+        <span class="s1">self</span><span class="s3">.</span><span class="s1">DoPlot</span><span class="s3">(</span><span class="s1">Model</span><span class="s3">)</span>
+
+    <span class="s2">def </span><span class="s1">DoPlot</span><span class="s3">(</span><span class="s1">self</span><span class="s3">, </span><span class="s1">Model</span><span class="s3">):</span>
+        <span class="s4">&quot;&quot;&quot; 
+        Create the plot of Head and Efficiency vs Flow, along with polynomial fits. 
+        &quot;&quot;&quot;</span>
+        <span class="s0"># Get smooth x,y arrays and R^2 for the fits</span>
+        <span class="s0"># If you used power=2 above for Head, be consistent here:</span>
+        <span class="s1">headx</span><span class="s3">, </span><span class="s1">heady</span><span class="s3">, </span><span class="s1">headRSq </span><span class="s3">= </span><span class="s1">Model</span><span class="s3">.</span><span class="s1">LSFitHead</span><span class="s3">.</span><span class="s1">GetPlotInfo</span><span class="s3">(</span><span class="s6">2</span><span class="s3">, </span><span class="s1">npoints</span><span class="s3">=</span><span class="s6">200</span><span class="s3">)</span>
+        <span class="s1">effx</span><span class="s3">, </span><span class="s1">effy</span><span class="s3">, </span><span class="s1">effRSq </span><span class="s3">= </span><span class="s1">Model</span><span class="s3">.</span><span class="s1">LSFitEff</span><span class="s3">.</span><span class="s1">GetPlotInfo</span><span class="s3">(</span><span class="s6">3</span><span class="s3">, </span><span class="s1">npoints</span><span class="s3">=</span><span class="s6">200</span><span class="s3">)</span>
+
+        <span class="s1">axes </span><span class="s3">= </span><span class="s1">self</span><span class="s3">.</span><span class="s1">ax</span>
+        <span class="s1">axes</span><span class="s3">.</span><span class="s1">clear</span><span class="s3">()  </span><span class="s0"># Clear old plot</span>
+        <span class="s1">axes2 </span><span class="s3">= </span><span class="s1">axes</span><span class="s3">.</span><span class="s1">twinx</span><span class="s3">()  </span><span class="s0"># Second y-axis for efficiency</span>
+
+        <span class="s0"># Plot raw data</span>
+        <span class="s1">axes</span><span class="s3">.</span><span class="s1">plot</span><span class="s3">(</span><span class="s1">Model</span><span class="s3">.</span><span class="s1">FlowData</span><span class="s3">, </span><span class="s1">Model</span><span class="s3">.</span><span class="s1">HeadData</span><span class="s3">, </span><span class="s5">'k^'</span><span class="s3">, </span><span class="s1">label</span><span class="s3">=</span><span class="s5">f&quot;Head Data (R²=</span><span class="s2">{</span><span class="s1">headRSq</span><span class="s2">:</span><span class="s5">.3f</span><span class="s2">}</span><span class="s5">)&quot;</span><span class="s3">)</span>
+        <span class="s1">axes2</span><span class="s3">.</span><span class="s1">plot</span><span class="s3">(</span><span class="s1">Model</span><span class="s3">.</span><span class="s1">FlowData</span><span class="s3">, </span><span class="s1">Model</span><span class="s3">.</span><span class="s1">EffData</span><span class="s3">, </span><span class="s5">'ko'</span><span class="s3">, </span><span class="s1">fillstyle</span><span class="s3">=</span><span class="s5">'none'</span><span class="s3">, </span><span class="s1">label</span><span class="s3">=</span><span class="s5">f&quot;Eff Data (R²=</span><span class="s2">{</span><span class="s1">effRSq</span><span class="s2">:</span><span class="s5">.3f</span><span class="s2">}</span><span class="s5">)&quot;</span><span class="s3">)</span>
+
+        <span class="s0"># Plot fitted curves</span>
+        <span class="s1">axes</span><span class="s3">.</span><span class="s1">plot</span><span class="s3">(</span><span class="s1">headx</span><span class="s3">, </span><span class="s1">heady</span><span class="s3">, </span><span class="s5">'k--'</span><span class="s3">, </span><span class="s1">label</span><span class="s3">=</span><span class="s5">&quot;Head Fit&quot;</span><span class="s3">)</span>
+        <span class="s1">axes2</span><span class="s3">.</span><span class="s1">plot</span><span class="s3">(</span><span class="s1">effx</span><span class="s3">, </span><span class="s1">effy</span><span class="s3">, </span><span class="s5">'k:'</span><span class="s3">, </span><span class="s1">label</span><span class="s3">=</span><span class="s5">&quot;Eff Fit&quot;</span><span class="s3">)</span>
+
+        <span class="s0"># Labels and title</span>
+        <span class="s1">axes</span><span class="s3">.</span><span class="s1">set_xlabel</span><span class="s3">(</span><span class="s5">f&quot;Flow Rate (</span><span class="s2">{</span><span class="s1">Model</span><span class="s3">.</span><span class="s1">FlowUnits</span><span class="s2">}</span><span class="s5">)&quot;</span><span class="s3">)</span>
+        <span class="s1">axes</span><span class="s3">.</span><span class="s1">set_ylabel</span><span class="s3">(</span><span class="s5">f&quot;Head (</span><span class="s2">{</span><span class="s1">Model</span><span class="s3">.</span><span class="s1">HeadUnits</span><span class="s2">}</span><span class="s5">)&quot;</span><span class="s3">)</span>
+        <span class="s1">axes2</span><span class="s3">.</span><span class="s1">set_ylabel</span><span class="s3">(</span><span class="s5">&quot;Efficiency (%)&quot;</span><span class="s3">)</span>
+        <span class="s1">axes</span><span class="s3">.</span><span class="s1">set_title</span><span class="s3">(</span><span class="s1">Model</span><span class="s3">.</span><span class="s1">PumpName</span><span class="s3">)</span>
+
+        <span class="s0"># Combine legends from both axes</span>
+        <span class="s1">lines1</span><span class="s3">, </span><span class="s1">labels1 </span><span class="s3">= </span><span class="s1">axes</span><span class="s3">.</span><span class="s1">get_legend_handles_labels</span><span class="s3">()</span>
+        <span class="s1">lines2</span><span class="s3">, </span><span class="s1">labels2 </span><span class="s3">= </span><span class="s1">axes2</span><span class="s3">.</span><span class="s1">get_legend_handles_labels</span><span class="s3">()</span>
+        <span class="s1">axes2</span><span class="s3">.</span><span class="s1">legend</span><span class="s3">(</span><span class="s1">lines1 </span><span class="s3">+ </span><span class="s1">lines2</span><span class="s3">, </span><span class="s1">labels1 </span><span class="s3">+ </span><span class="s1">labels2</span><span class="s3">, </span><span class="s1">loc</span><span class="s3">=</span><span class="s5">'best'</span><span class="s3">)</span>
+
+        <span class="s0"># Finally draw on the canvas</span>
+        <span class="s1">self</span><span class="s3">.</span><span class="s1">canvas</span><span class="s3">.</span><span class="s1">draw</span><span class="s3">()</span>
+
+    <span class="s2">def </span><span class="s1">setViewWidgets</span><span class="s3">(</span><span class="s1">self</span><span class="s3">, </span><span class="s1">w</span><span class="s3">):</span>
+        <span class="s4">&quot;&quot;&quot; 
+        Called by the controller so we know which actual widgets to manipulate. 
+        &quot;&quot;&quot;</span>
+        <span class="s3">(</span>
+            <span class="s1">self</span><span class="s3">.</span><span class="s1">LE_PumpName</span><span class="s3">,</span>
+            <span class="s1">self</span><span class="s3">.</span><span class="s1">LE_FlowUnits</span><span class="s3">,</span>
+            <span class="s1">self</span><span class="s3">.</span><span class="s1">LE_HeadUnits</span><span class="s3">,</span>
+            <span class="s1">self</span><span class="s3">.</span><span class="s1">LE_HeadCoefs</span><span class="s3">,</span>
+            <span class="s1">self</span><span class="s3">.</span><span class="s1">LE_EffCoefs</span><span class="s3">,</span>
+            <span class="s1">self</span><span class="s3">.</span><span class="s1">ax</span><span class="s3">,</span>
+            <span class="s1">self</span><span class="s3">.</span><span class="s1">canvas</span>
+        <span class="s3">) = </span><span class="s1">w</span>
+<span class="s0"># endregion</span></pre>
+</body>
+</html>

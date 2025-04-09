@@ -1,0 +1,189 @@
+<html>
+<head>
+<title>pump.ui</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.s0 { color: #d5b778;}
+.s1 { color: #bcbec4;}
+.s2 { color: #6aab73;}
+.s3 { color: #bcbec4;}
+</style>
+</head>
+<body bgcolor="#1e1f22">
+<table CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#606060" >
+<tr><td><center>
+<font face="Arial, Helvetica" color="#000000">
+pump.ui</font>
+</center></td></tr></table>
+<pre><span class="s0">&lt;?</span><span class="s1">xml version</span><span class="s2">=&quot;1.0&quot; </span><span class="s1">encoding</span><span class="s2">=&quot;UTF-8&quot;</span><span class="s0">?&gt;</span>
+<span class="s0">&lt;ui </span><span class="s1">version</span><span class="s2">=&quot;4.0&quot;</span><span class="s0">&gt;</span>
+ <span class="s0">&lt;class&gt;</span><span class="s3">Form</span><span class="s0">&lt;/class&gt;</span>
+ <span class="s0">&lt;widget </span><span class="s1">class</span><span class="s2">=&quot;QWidget&quot; </span><span class="s1">name</span><span class="s2">=&quot;Form&quot;</span><span class="s0">&gt;</span>
+  <span class="s0">&lt;property </span><span class="s1">name</span><span class="s2">=&quot;geometry&quot;</span><span class="s0">&gt;</span>
+   <span class="s0">&lt;rect&gt;</span>
+    <span class="s0">&lt;x&gt;</span><span class="s3">0</span><span class="s0">&lt;/x&gt;</span>
+    <span class="s0">&lt;y&gt;</span><span class="s3">0</span><span class="s0">&lt;/y&gt;</span>
+    <span class="s0">&lt;width&gt;</span><span class="s3">696</span><span class="s0">&lt;/width&gt;</span>
+    <span class="s0">&lt;height&gt;</span><span class="s3">796</span><span class="s0">&lt;/height&gt;</span>
+   <span class="s0">&lt;/rect&gt;</span>
+  <span class="s0">&lt;/property&gt;</span>
+  <span class="s0">&lt;property </span><span class="s1">name</span><span class="s2">=&quot;windowTitle&quot;</span><span class="s0">&gt;</span>
+   <span class="s0">&lt;string&gt;</span><span class="s3">Form</span><span class="s0">&lt;/string&gt;</span>
+  <span class="s0">&lt;/property&gt;</span>
+  <span class="s0">&lt;layout </span><span class="s1">class</span><span class="s2">=&quot;QVBoxLayout&quot; </span><span class="s1">name</span><span class="s2">=&quot;verticalLayout&quot;</span><span class="s0">&gt;</span>
+   <span class="s0">&lt;item&gt;</span>
+    <span class="s0">&lt;widget </span><span class="s1">class</span><span class="s2">=&quot;QGroupBox&quot; </span><span class="s1">name</span><span class="s2">=&quot;GB_Input&quot;</span><span class="s0">&gt;</span>
+     <span class="s0">&lt;property </span><span class="s1">name</span><span class="s2">=&quot;sizePolicy&quot;</span><span class="s0">&gt;</span>
+      <span class="s0">&lt;sizepolicy </span><span class="s1">hsizetype</span><span class="s2">=&quot;Expanding&quot; </span><span class="s1">vsizetype</span><span class="s2">=&quot;Fixed&quot;</span><span class="s0">&gt;</span>
+       <span class="s0">&lt;horstretch&gt;</span><span class="s3">0</span><span class="s0">&lt;/horstretch&gt;</span>
+       <span class="s0">&lt;verstretch&gt;</span><span class="s3">0</span><span class="s0">&lt;/verstretch&gt;</span>
+      <span class="s0">&lt;/sizepolicy&gt;</span>
+     <span class="s0">&lt;/property&gt;</span>
+     <span class="s0">&lt;property </span><span class="s1">name</span><span class="s2">=&quot;maximumSize&quot;</span><span class="s0">&gt;</span>
+      <span class="s0">&lt;size&gt;</span>
+       <span class="s0">&lt;width&gt;</span><span class="s3">16777215</span><span class="s0">&lt;/width&gt;</span>
+       <span class="s0">&lt;height&gt;</span><span class="s3">135</span><span class="s0">&lt;/height&gt;</span>
+      <span class="s0">&lt;/size&gt;</span>
+     <span class="s0">&lt;/property&gt;</span>
+     <span class="s0">&lt;property </span><span class="s1">name</span><span class="s2">=&quot;title&quot;</span><span class="s0">&gt;</span>
+      <span class="s0">&lt;string&gt;</span><span class="s3">Input</span><span class="s0">&lt;/string&gt;</span>
+     <span class="s0">&lt;/property&gt;</span>
+     <span class="s0">&lt;layout </span><span class="s1">class</span><span class="s2">=&quot;QGridLayout&quot; </span><span class="s1">name</span><span class="s2">=&quot;gridLayout&quot;</span><span class="s0">&gt;</span>
+      <span class="s0">&lt;item </span><span class="s1">row</span><span class="s2">=&quot;0&quot; </span><span class="s1">column</span><span class="s2">=&quot;0&quot;</span><span class="s0">&gt;</span>
+       <span class="s0">&lt;widget </span><span class="s1">class</span><span class="s2">=&quot;QLabel&quot; </span><span class="s1">name</span><span class="s2">=&quot;LBL_Filename&quot;</span><span class="s0">&gt;</span>
+        <span class="s0">&lt;property </span><span class="s1">name</span><span class="s2">=&quot;text&quot;</span><span class="s0">&gt;</span>
+         <span class="s0">&lt;string&gt;</span><span class="s3">Filename</span><span class="s0">&lt;/string&gt;</span>
+        <span class="s0">&lt;/property&gt;</span>
+       <span class="s0">&lt;/widget&gt;</span>
+      <span class="s0">&lt;/item&gt;</span>
+      <span class="s0">&lt;item </span><span class="s1">row</span><span class="s2">=&quot;0&quot; </span><span class="s1">column</span><span class="s2">=&quot;1&quot;</span><span class="s0">&gt;</span>
+       <span class="s0">&lt;widget </span><span class="s1">class</span><span class="s2">=&quot;QTextEdit&quot; </span><span class="s1">name</span><span class="s2">=&quot;TE_Filename&quot;</span><span class="s0">&gt;</span>
+        <span class="s0">&lt;property </span><span class="s1">name</span><span class="s2">=&quot;sizePolicy&quot;</span><span class="s0">&gt;</span>
+         <span class="s0">&lt;sizepolicy </span><span class="s1">hsizetype</span><span class="s2">=&quot;Expanding&quot; </span><span class="s1">vsizetype</span><span class="s2">=&quot;Expanding&quot;</span><span class="s0">&gt;</span>
+          <span class="s0">&lt;horstretch&gt;</span><span class="s3">0</span><span class="s0">&lt;/horstretch&gt;</span>
+          <span class="s0">&lt;verstretch&gt;</span><span class="s3">0</span><span class="s0">&lt;/verstretch&gt;</span>
+         <span class="s0">&lt;/sizepolicy&gt;</span>
+        <span class="s0">&lt;/property&gt;</span>
+        <span class="s0">&lt;property </span><span class="s1">name</span><span class="s2">=&quot;minimumSize&quot;</span><span class="s0">&gt;</span>
+         <span class="s0">&lt;size&gt;</span>
+          <span class="s0">&lt;width&gt;</span><span class="s3">0</span><span class="s0">&lt;/width&gt;</span>
+          <span class="s0">&lt;height&gt;</span><span class="s3">20</span><span class="s0">&lt;/height&gt;</span>
+         <span class="s0">&lt;/size&gt;</span>
+        <span class="s0">&lt;/property&gt;</span>
+        <span class="s0">&lt;property </span><span class="s1">name</span><span class="s2">=&quot;baseSize&quot;</span><span class="s0">&gt;</span>
+         <span class="s0">&lt;size&gt;</span>
+          <span class="s0">&lt;width&gt;</span><span class="s3">0</span><span class="s0">&lt;/width&gt;</span>
+          <span class="s0">&lt;height&gt;</span><span class="s3">50</span><span class="s0">&lt;/height&gt;</span>
+         <span class="s0">&lt;/size&gt;</span>
+        <span class="s0">&lt;/property&gt;</span>
+       <span class="s0">&lt;/widget&gt;</span>
+      <span class="s0">&lt;/item&gt;</span>
+      <span class="s0">&lt;item </span><span class="s1">row</span><span class="s2">=&quot;1&quot; </span><span class="s1">column</span><span class="s2">=&quot;1&quot;</span><span class="s0">&gt;</span>
+       <span class="s0">&lt;widget </span><span class="s1">class</span><span class="s2">=&quot;QPushButton&quot; </span><span class="s1">name</span><span class="s2">=&quot;CMD_Open&quot;</span><span class="s0">&gt;</span>
+        <span class="s0">&lt;property </span><span class="s1">name</span><span class="s2">=&quot;enabled&quot;</span><span class="s0">&gt;</span>
+         <span class="s0">&lt;bool&gt;</span><span class="s3">true</span><span class="s0">&lt;/bool&gt;</span>
+        <span class="s0">&lt;/property&gt;</span>
+        <span class="s0">&lt;property </span><span class="s1">name</span><span class="s2">=&quot;sizePolicy&quot;</span><span class="s0">&gt;</span>
+         <span class="s0">&lt;sizepolicy </span><span class="s1">hsizetype</span><span class="s2">=&quot;Maximum&quot; </span><span class="s1">vsizetype</span><span class="s2">=&quot;Fixed&quot;</span><span class="s0">&gt;</span>
+          <span class="s0">&lt;horstretch&gt;</span><span class="s3">0</span><span class="s0">&lt;/horstretch&gt;</span>
+          <span class="s0">&lt;verstretch&gt;</span><span class="s3">0</span><span class="s0">&lt;/verstretch&gt;</span>
+         <span class="s0">&lt;/sizepolicy&gt;</span>
+        <span class="s0">&lt;/property&gt;</span>
+        <span class="s0">&lt;property </span><span class="s1">name</span><span class="s2">=&quot;text&quot;</span><span class="s0">&gt;</span>
+         <span class="s0">&lt;string&gt;</span><span class="s3">Read File and Calculate</span><span class="s0">&lt;/string&gt;</span>
+        <span class="s0">&lt;/property&gt;</span>
+       <span class="s0">&lt;/widget&gt;</span>
+      <span class="s0">&lt;/item&gt;</span>
+     <span class="s0">&lt;/layout&gt;</span>
+    <span class="s0">&lt;/widget&gt;</span>
+   <span class="s0">&lt;/item&gt;</span>
+   <span class="s0">&lt;item&gt;</span>
+    <span class="s0">&lt;widget </span><span class="s1">class</span><span class="s2">=&quot;QGroupBox&quot; </span><span class="s1">name</span><span class="s2">=&quot;GB_Output&quot;</span><span class="s0">&gt;</span>
+     <span class="s0">&lt;property </span><span class="s1">name</span><span class="s2">=&quot;title&quot;</span><span class="s0">&gt;</span>
+      <span class="s0">&lt;string&gt;</span><span class="s3">Output</span><span class="s0">&lt;/string&gt;</span>
+     <span class="s0">&lt;/property&gt;</span>
+     <span class="s0">&lt;layout </span><span class="s1">class</span><span class="s2">=&quot;QGridLayout&quot; </span><span class="s1">name</span><span class="s2">=&quot;GL_Output&quot;</span><span class="s0">&gt;</span>
+      <span class="s0">&lt;item </span><span class="s1">row</span><span class="s2">=&quot;3&quot; </span><span class="s1">column</span><span class="s2">=&quot;1&quot; </span><span class="s1">colspan</span><span class="s2">=&quot;3&quot;</span><span class="s0">&gt;</span>
+       <span class="s0">&lt;widget </span><span class="s1">class</span><span class="s2">=&quot;QLineEdit&quot; </span><span class="s1">name</span><span class="s2">=&quot;LE_EffCoefs&quot;</span><span class="s0">/&gt;</span>
+      <span class="s0">&lt;/item&gt;</span>
+      <span class="s0">&lt;item </span><span class="s1">row</span><span class="s2">=&quot;1&quot; </span><span class="s1">column</span><span class="s2">=&quot;2&quot;</span><span class="s0">&gt;</span>
+       <span class="s0">&lt;widget </span><span class="s1">class</span><span class="s2">=&quot;QLabel&quot; </span><span class="s1">name</span><span class="s2">=&quot;LBL_HeadUnits&quot;</span><span class="s0">&gt;</span>
+        <span class="s0">&lt;property </span><span class="s1">name</span><span class="s2">=&quot;text&quot;</span><span class="s0">&gt;</span>
+         <span class="s0">&lt;string&gt;</span><span class="s3">Head Units</span><span class="s0">&lt;/string&gt;</span>
+        <span class="s0">&lt;/property&gt;</span>
+       <span class="s0">&lt;/widget&gt;</span>
+      <span class="s0">&lt;/item&gt;</span>
+      <span class="s0">&lt;item </span><span class="s1">row</span><span class="s2">=&quot;2&quot; </span><span class="s1">column</span><span class="s2">=&quot;0&quot;</span><span class="s0">&gt;</span>
+       <span class="s0">&lt;widget </span><span class="s1">class</span><span class="s2">=&quot;QLabel&quot; </span><span class="s1">name</span><span class="s2">=&quot;LBL_HeadCoefs&quot;</span><span class="s0">&gt;</span>
+        <span class="s0">&lt;property </span><span class="s1">name</span><span class="s2">=&quot;text&quot;</span><span class="s0">&gt;</span>
+         <span class="s0">&lt;string&gt;</span><span class="s3">Head Coefficients</span><span class="s0">&lt;/string&gt;</span>
+        <span class="s0">&lt;/property&gt;</span>
+       <span class="s0">&lt;/widget&gt;</span>
+      <span class="s0">&lt;/item&gt;</span>
+      <span class="s0">&lt;item </span><span class="s1">row</span><span class="s2">=&quot;3&quot; </span><span class="s1">column</span><span class="s2">=&quot;0&quot;</span><span class="s0">&gt;</span>
+       <span class="s0">&lt;widget </span><span class="s1">class</span><span class="s2">=&quot;QLabel&quot; </span><span class="s1">name</span><span class="s2">=&quot;LBL_EffCoefs&quot;</span><span class="s0">&gt;</span>
+        <span class="s0">&lt;property </span><span class="s1">name</span><span class="s2">=&quot;text&quot;</span><span class="s0">&gt;</span>
+         <span class="s0">&lt;string&gt;</span><span class="s3">Efficiency Coefficients</span><span class="s0">&lt;/string&gt;</span>
+        <span class="s0">&lt;/property&gt;</span>
+       <span class="s0">&lt;/widget&gt;</span>
+      <span class="s0">&lt;/item&gt;</span>
+      <span class="s0">&lt;item </span><span class="s1">row</span><span class="s2">=&quot;2&quot; </span><span class="s1">column</span><span class="s2">=&quot;1&quot; </span><span class="s1">colspan</span><span class="s2">=&quot;3&quot;</span><span class="s0">&gt;</span>
+       <span class="s0">&lt;widget </span><span class="s1">class</span><span class="s2">=&quot;QLineEdit&quot; </span><span class="s1">name</span><span class="s2">=&quot;LE_HeadCoefs&quot;</span><span class="s0">/&gt;</span>
+      <span class="s0">&lt;/item&gt;</span>
+      <span class="s0">&lt;item </span><span class="s1">row</span><span class="s2">=&quot;0&quot; </span><span class="s1">column</span><span class="s2">=&quot;1&quot; </span><span class="s1">colspan</span><span class="s2">=&quot;3&quot;</span><span class="s0">&gt;</span>
+       <span class="s0">&lt;widget </span><span class="s1">class</span><span class="s2">=&quot;QLineEdit&quot; </span><span class="s1">name</span><span class="s2">=&quot;LE_PumpName&quot;</span><span class="s0">/&gt;</span>
+      <span class="s0">&lt;/item&gt;</span>
+      <span class="s0">&lt;item </span><span class="s1">row</span><span class="s2">=&quot;1&quot; </span><span class="s1">column</span><span class="s2">=&quot;1&quot;</span><span class="s0">&gt;</span>
+       <span class="s0">&lt;widget </span><span class="s1">class</span><span class="s2">=&quot;QLineEdit&quot; </span><span class="s1">name</span><span class="s2">=&quot;LE_FlowUnits&quot;</span><span class="s0">/&gt;</span>
+      <span class="s0">&lt;/item&gt;</span>
+      <span class="s0">&lt;item </span><span class="s1">row</span><span class="s2">=&quot;0&quot; </span><span class="s1">column</span><span class="s2">=&quot;0&quot;</span><span class="s0">&gt;</span>
+       <span class="s0">&lt;widget </span><span class="s1">class</span><span class="s2">=&quot;QLabel&quot; </span><span class="s1">name</span><span class="s2">=&quot;LBL_PumpName&quot;</span><span class="s0">&gt;</span>
+        <span class="s0">&lt;property </span><span class="s1">name</span><span class="s2">=&quot;text&quot;</span><span class="s0">&gt;</span>
+         <span class="s0">&lt;string&gt;</span><span class="s3">Pump Name</span><span class="s0">&lt;/string&gt;</span>
+        <span class="s0">&lt;/property&gt;</span>
+       <span class="s0">&lt;/widget&gt;</span>
+      <span class="s0">&lt;/item&gt;</span>
+      <span class="s0">&lt;item </span><span class="s1">row</span><span class="s2">=&quot;1&quot; </span><span class="s1">column</span><span class="s2">=&quot;0&quot;</span><span class="s0">&gt;</span>
+       <span class="s0">&lt;widget </span><span class="s1">class</span><span class="s2">=&quot;QLabel&quot; </span><span class="s1">name</span><span class="s2">=&quot;LBL_FlowUnits&quot;</span><span class="s0">&gt;</span>
+        <span class="s0">&lt;property </span><span class="s1">name</span><span class="s2">=&quot;text&quot;</span><span class="s0">&gt;</span>
+         <span class="s0">&lt;string&gt;</span><span class="s3">Flow Units</span><span class="s0">&lt;/string&gt;</span>
+        <span class="s0">&lt;/property&gt;</span>
+       <span class="s0">&lt;/widget&gt;</span>
+      <span class="s0">&lt;/item&gt;</span>
+      <span class="s0">&lt;item </span><span class="s1">row</span><span class="s2">=&quot;1&quot; </span><span class="s1">column</span><span class="s2">=&quot;3&quot;</span><span class="s0">&gt;</span>
+       <span class="s0">&lt;widget </span><span class="s1">class</span><span class="s2">=&quot;QLineEdit&quot; </span><span class="s1">name</span><span class="s2">=&quot;LE_HeadUnits&quot;</span><span class="s0">/&gt;</span>
+      <span class="s0">&lt;/item&gt;</span>
+      <span class="s0">&lt;item </span><span class="s1">row</span><span class="s2">=&quot;5&quot; </span><span class="s1">column</span><span class="s2">=&quot;0&quot; </span><span class="s1">colspan</span><span class="s2">=&quot;4&quot;</span><span class="s0">&gt;</span>
+       <span class="s0">&lt;widget </span><span class="s1">class</span><span class="s2">=&quot;QWidget&quot; </span><span class="s1">name</span><span class="s2">=&quot;W_Plot&quot; </span><span class="s1">native</span><span class="s2">=&quot;true&quot;</span><span class="s0">&gt;</span>
+        <span class="s0">&lt;property </span><span class="s1">name</span><span class="s2">=&quot;sizePolicy&quot;</span><span class="s0">&gt;</span>
+         <span class="s0">&lt;sizepolicy </span><span class="s1">hsizetype</span><span class="s2">=&quot;Expanding&quot; </span><span class="s1">vsizetype</span><span class="s2">=&quot;Expanding&quot;</span><span class="s0">&gt;</span>
+          <span class="s0">&lt;horstretch&gt;</span><span class="s3">0</span><span class="s0">&lt;/horstretch&gt;</span>
+          <span class="s0">&lt;verstretch&gt;</span><span class="s3">0</span><span class="s0">&lt;/verstretch&gt;</span>
+         <span class="s0">&lt;/sizepolicy&gt;</span>
+        <span class="s0">&lt;/property&gt;</span>
+       <span class="s0">&lt;/widget&gt;</span>
+      <span class="s0">&lt;/item&gt;</span>
+      <span class="s0">&lt;item </span><span class="s1">row</span><span class="s2">=&quot;6&quot; </span><span class="s1">column</span><span class="s2">=&quot;2&quot;</span><span class="s0">&gt;</span>
+       <span class="s0">&lt;widget </span><span class="s1">class</span><span class="s2">=&quot;QPushButton&quot; </span><span class="s1">name</span><span class="s2">=&quot;PB_Exit&quot;</span><span class="s0">&gt;</span>
+        <span class="s0">&lt;property </span><span class="s1">name</span><span class="s2">=&quot;sizePolicy&quot;</span><span class="s0">&gt;</span>
+         <span class="s0">&lt;sizepolicy </span><span class="s1">hsizetype</span><span class="s2">=&quot;Preferred&quot; </span><span class="s1">vsizetype</span><span class="s2">=&quot;Fixed&quot;</span><span class="s0">&gt;</span>
+          <span class="s0">&lt;horstretch&gt;</span><span class="s3">0</span><span class="s0">&lt;/horstretch&gt;</span>
+          <span class="s0">&lt;verstretch&gt;</span><span class="s3">0</span><span class="s0">&lt;/verstretch&gt;</span>
+         <span class="s0">&lt;/sizepolicy&gt;</span>
+        <span class="s0">&lt;/property&gt;</span>
+        <span class="s0">&lt;property </span><span class="s1">name</span><span class="s2">=&quot;text&quot;</span><span class="s0">&gt;</span>
+         <span class="s0">&lt;string&gt;</span><span class="s3">Exit</span><span class="s0">&lt;/string&gt;</span>
+        <span class="s0">&lt;/property&gt;</span>
+       <span class="s0">&lt;/widget&gt;</span>
+      <span class="s0">&lt;/item&gt;</span>
+     <span class="s0">&lt;/layout&gt;</span>
+    <span class="s0">&lt;/widget&gt;</span>
+   <span class="s0">&lt;/item&gt;</span>
+  <span class="s0">&lt;/layout&gt;</span>
+ <span class="s0">&lt;/widget&gt;</span>
+ <span class="s0">&lt;resources/&gt;</span>
+ <span class="s0">&lt;connections/&gt;</span>
+<span class="s0">&lt;/ui&gt;</span>
+</pre>
+</body>
+</html>

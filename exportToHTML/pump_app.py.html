@@ -1,0 +1,129 @@
+<html>
+<head>
+<title>pump_app.py</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.s0 { color: #7a7e85;}
+.s1 { color: #bcbec4;}
+.s2 { color: #cf8e6d;}
+.s3 { color: #bcbec4;}
+.s4 { color: #6aab73;}
+.s5 { color: #2aacb8;}
+.s6 { color: #5f826b; font-style: italic;}
+</style>
+</head>
+<body bgcolor="#1e1f22">
+<table CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#606060" >
+<tr><td><center>
+<font face="Arial, Helvetica" color="#000000">
+pump_app.py</font>
+</center></td></tr></table>
+<pre><span class="s0">#region imports</span>
+<span class="s2">import </span><span class="s1">numpy </span><span class="s2">as </span><span class="s1">np</span>
+<span class="s2">import </span><span class="s1">PyQt5</span><span class="s3">.</span><span class="s1">QtWidgets </span><span class="s2">as </span><span class="s1">qtw</span>
+<span class="s2">from </span><span class="s1">matplotlib</span><span class="s3">.</span><span class="s1">backends</span><span class="s3">.</span><span class="s1">backend_qt5agg </span><span class="s2">import </span><span class="s1">FigureCanvasQTAgg</span>
+<span class="s2">from </span><span class="s1">matplotlib</span><span class="s3">.</span><span class="s1">figure </span><span class="s2">import </span><span class="s1">Figure</span>
+
+<span class="s2">from </span><span class="s1">pathlib </span><span class="s2">import </span><span class="s1">Path</span>
+
+<span class="s2">import </span><span class="s1">sys</span>
+<span class="s2">import </span><span class="s1">os</span>
+
+<span class="s0"># I built the gui as pump.ui and used pyuic5 to make pump.py</span>
+<span class="s2">from </span><span class="s1">pump </span><span class="s2">import </span><span class="s1">Ui_Form</span>
+<span class="s2">from </span><span class="s1">Pump_MVC </span><span class="s2">import </span><span class="s1">Pump_Controller</span>
+<span class="s0">#endregion</span>
+
+<span class="s0">#region class definitions</span>
+<span class="s2">class </span><span class="s1">PumpCurve_GUI_Class</span><span class="s3">(</span><span class="s1">Ui_Form</span><span class="s3">, </span><span class="s1">qtw</span><span class="s3">.</span><span class="s1">QWidget</span><span class="s3">):  </span><span class="s0">#class for PumpCurve_GUI inherits from Ui_Form &amp; qtw.QWidget</span>
+    <span class="s2">def </span><span class="s1">__init__</span><span class="s3">(</span><span class="s1">self</span><span class="s3">): </span><span class="s0">#constructor for this class</span>
+        <span class="s1">super</span><span class="s3">().</span><span class="s1">__init__</span><span class="s3">() </span><span class="s0">#runs constructor from parent classes</span>
+        <span class="s1">self</span><span class="s3">.</span><span class="s1">setupUi</span><span class="s3">(</span><span class="s1">self</span><span class="s3">) </span><span class="s0">#executes the setupUi from Ui_Form inheritance</span>
+        <span class="s1">self</span><span class="s3">.</span><span class="s1">AssignSignals</span><span class="s3">() </span><span class="s0">#connects 'clicked' signals from buttons to proper slots</span>
+        <span class="s1">self</span><span class="s3">.</span><span class="s1">FilePath </span><span class="s3">= </span><span class="s1">os</span><span class="s3">.</span><span class="s1">getcwd</span><span class="s3">() </span><span class="s0">#gets the current working directory</span>
+
+        <span class="s1">self</span><span class="s3">.</span><span class="s1">FileName </span><span class="s3">= </span><span class="s4">&quot;&quot;</span>
+
+        <span class="s0">#these are for matplotlib using pyqt</span>
+        <span class="s1">self</span><span class="s3">.</span><span class="s1">canvas </span><span class="s3">= </span><span class="s1">FigureCanvasQTAgg</span><span class="s3">(</span><span class="s1">Figure</span><span class="s3">(</span><span class="s1">figsize</span><span class="s3">=(</span><span class="s5">5</span><span class="s3">, </span><span class="s5">3</span><span class="s3">), </span><span class="s1">tight_layout</span><span class="s3">=</span><span class="s2">True</span><span class="s3">, </span><span class="s1">frameon</span><span class="s3">=</span><span class="s2">True</span><span class="s3">))</span>
+        <span class="s1">self</span><span class="s3">.</span><span class="s1">ax </span><span class="s3">= </span><span class="s1">self</span><span class="s3">.</span><span class="s1">canvas</span><span class="s3">.</span><span class="s1">figure</span><span class="s3">.</span><span class="s1">add_subplot</span><span class="s3">()</span>
+        <span class="s0">#add the canvas to the form (can't be done directly in qtdesigner)</span>
+        <span class="s1">self</span><span class="s3">.</span><span class="s1">GL_Output</span><span class="s3">.</span><span class="s1">addWidget</span><span class="s3">(</span><span class="s1">self</span><span class="s3">.</span><span class="s1">canvas</span><span class="s3">, </span><span class="s5">5</span><span class="s3">, </span><span class="s5">0</span><span class="s3">, </span><span class="s5">1</span><span class="s3">, </span><span class="s5">4</span><span class="s3">)</span>
+
+        <span class="s1">self</span><span class="s3">.</span><span class="s1">myPump </span><span class="s3">= </span><span class="s1">Pump_Controller</span><span class="s3">() </span><span class="s0">#create a pump controller object</span>
+        <span class="s1">self</span><span class="s3">.</span><span class="s1">setViewWidgets</span><span class="s3">() </span><span class="s0">#pass along widgets to myPump for display</span>
+
+        <span class="s0">#show the widget</span>
+        <span class="s1">self</span><span class="s3">.</span><span class="s1">show</span><span class="s3">()</span>
+
+    <span class="s2">def </span><span class="s1">AssignSignals</span><span class="s3">(</span><span class="s1">self</span><span class="s3">): </span><span class="s0">#connect the signals from buttons to slots</span>
+        <span class="s1">self</span><span class="s3">.</span><span class="s1">PB_Exit</span><span class="s3">.</span><span class="s1">clicked</span><span class="s3">.</span><span class="s1">connect</span><span class="s3">(</span><span class="s1">self</span><span class="s3">.</span><span class="s1">Exit</span><span class="s3">)</span>
+        <span class="s1">self</span><span class="s3">.</span><span class="s1">CMD_Open</span><span class="s3">.</span><span class="s1">clicked</span><span class="s3">.</span><span class="s1">connect</span><span class="s3">(</span><span class="s1">self</span><span class="s3">.</span><span class="s1">ReadAndCalculate</span><span class="s3">)</span>
+
+    <span class="s2">def </span><span class="s1">setViewWidgets</span><span class="s3">(</span><span class="s1">self</span><span class="s3">):</span>
+        <span class="s6">&quot;&quot;&quot; 
+        Here is where I pass a list of display widgets to the controller that get 
+        passed along to the view so that the controller can update the view internally. 
+        &quot;&quot;&quot;</span>
+        <span class="s1">w </span><span class="s3">= [</span>
+            <span class="s1">self</span><span class="s3">.</span><span class="s1">LE_PumpName</span><span class="s3">,</span>
+            <span class="s1">self</span><span class="s3">.</span><span class="s1">LE_FlowUnits</span><span class="s3">,</span>
+            <span class="s1">self</span><span class="s3">.</span><span class="s1">LE_HeadUnits</span><span class="s3">,</span>
+            <span class="s1">self</span><span class="s3">.</span><span class="s1">LE_HeadCoefs</span><span class="s3">,</span>
+            <span class="s1">self</span><span class="s3">.</span><span class="s1">LE_EffCoefs</span><span class="s3">,</span>
+            <span class="s1">self</span><span class="s3">.</span><span class="s1">ax</span><span class="s3">,</span>
+            <span class="s1">self</span><span class="s3">.</span><span class="s1">canvas</span>
+        <span class="s3">]</span>
+        <span class="s1">self</span><span class="s3">.</span><span class="s1">myPump</span><span class="s3">.</span><span class="s1">setViewWidgets</span><span class="s3">(</span><span class="s1">w</span><span class="s3">)</span>
+
+    <span class="s2">def </span><span class="s1">ReadAndCalculate</span><span class="s3">(</span><span class="s1">self</span><span class="s3">):</span>
+        <span class="s6">''' 
+        Should open a dialog box to search file system for target file. 
+        Then, open the file and read the data. 
+        Then, fill out the form with the data. 
+        '''</span>
+        <span class="s2">if </span><span class="s1">self</span><span class="s3">.</span><span class="s1">OpenFile</span><span class="s3">():</span>
+            <span class="s2">with </span><span class="s1">open</span><span class="s3">(</span><span class="s1">self</span><span class="s3">.</span><span class="s1">FileName</span><span class="s3">, </span><span class="s4">'r'</span><span class="s3">) </span><span class="s2">as </span><span class="s1">f1</span><span class="s3">:</span>
+                <span class="s1">data </span><span class="s3">= </span><span class="s1">f1</span><span class="s3">.</span><span class="s1">readlines</span><span class="s3">()</span>
+            <span class="s1">self</span><span class="s3">.</span><span class="s1">myPump</span><span class="s3">.</span><span class="s1">ImportFromFile</span><span class="s3">(</span><span class="s1">data</span><span class="s3">)</span>
+            <span class="s2">return True</span>
+        <span class="s2">else</span><span class="s3">:</span>
+            <span class="s2">return False</span>
+
+    <span class="s2">def </span><span class="s1">OpenFile</span><span class="s3">(</span><span class="s1">self</span><span class="s3">):</span>
+        <span class="s6">''' 
+        This is the slot to open a dialog and search file system. 
+        :return: boolean for if the operation was successful. 
+        '''</span>
+        <span class="s0"># JES Missing Code: use qtw.QFileDialog.getOpenFileName</span>
+        <span class="s1">fname </span><span class="s3">= </span><span class="s1">qtw</span><span class="s3">.</span><span class="s1">QFileDialog</span><span class="s3">.</span><span class="s1">getOpenFileName</span><span class="s3">(</span>
+            <span class="s1">self</span><span class="s3">,</span>
+            <span class="s4">&quot;Open Pump File&quot;</span><span class="s3">,</span>
+            <span class="s1">self</span><span class="s3">.</span><span class="s1">FilePath</span><span class="s3">,</span>
+            <span class="s4">&quot;Text Files (*.txt);;All Files (*)&quot;</span>
+        <span class="s3">)</span>
+        <span class="s1">oTF </span><span class="s3">= </span><span class="s1">len</span><span class="s3">(</span><span class="s1">fname</span><span class="s3">[</span><span class="s5">0</span><span class="s3">]) &gt; </span><span class="s5">0</span>
+        <span class="s2">if </span><span class="s1">oTF</span><span class="s3">:</span>
+            <span class="s1">self</span><span class="s3">.</span><span class="s1">FileName </span><span class="s3">= </span><span class="s1">fname</span><span class="s3">[</span><span class="s5">0</span><span class="s3">]</span>
+            <span class="s1">self</span><span class="s3">.</span><span class="s1">FilePath </span><span class="s3">= </span><span class="s1">str</span><span class="s3">(</span><span class="s1">Path</span><span class="s3">(</span><span class="s1">fname</span><span class="s3">[</span><span class="s5">0</span><span class="s3">]).</span><span class="s1">parents</span><span class="s3">[</span><span class="s5">0</span><span class="s3">]) + </span><span class="s4">'/'</span>
+            <span class="s1">self</span><span class="s3">.</span><span class="s1">TE_Filename</span><span class="s3">.</span><span class="s1">setText</span><span class="s3">(</span><span class="s1">self</span><span class="s3">.</span><span class="s1">FileName</span><span class="s3">)</span>
+        <span class="s2">return </span><span class="s1">oTF</span>
+
+    <span class="s2">def </span><span class="s1">Exit</span><span class="s3">(</span><span class="s1">self</span><span class="s3">):</span>
+        <span class="s1">qapp</span><span class="s3">.</span><span class="s1">exit</span><span class="s3">()</span>
+<span class="s0">#endregion</span>
+
+<span class="s0">#region function definitions</span>
+<span class="s2">def </span><span class="s1">main</span><span class="s3">():</span>
+    <span class="s1">PumpCurve_GUI </span><span class="s3">= </span><span class="s1">PumpCurve_GUI_Class</span><span class="s3">() </span><span class="s0">#object of type PumpCurve_GUI_Class</span>
+    <span class="s1">qapp</span><span class="s3">.</span><span class="s1">exec_</span><span class="s3">()</span>
+<span class="s0">#endregion</span>
+
+<span class="s0">#region function calls</span>
+<span class="s2">if </span><span class="s1">__name__ </span><span class="s3">== </span><span class="s4">&quot;__main__&quot;</span><span class="s3">:</span>
+    <span class="s1">qapp </span><span class="s3">= </span><span class="s1">qtw</span><span class="s3">.</span><span class="s1">QApplication</span><span class="s3">(</span><span class="s1">sys</span><span class="s3">.</span><span class="s1">argv</span><span class="s3">)</span>
+    <span class="s1">main</span><span class="s3">()</span>
+<span class="s0">#endregion</span>
+</pre>
+</body>
+</html>

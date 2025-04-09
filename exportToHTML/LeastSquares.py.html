@@ -1,0 +1,100 @@
+<html>
+<head>
+<title>LeastSquares.py</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.s0 { color: #7a7e85;}
+.s1 { color: #bcbec4;}
+.s2 { color: #cf8e6d;}
+.s3 { color: #bcbec4;}
+.s4 { color: #5f826b; font-style: italic;}
+.s5 { color: #2aacb8;}
+.s6 { color: #6aab73;}
+</style>
+</head>
+<body bgcolor="#1e1f22">
+<table CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#606060" >
+<tr><td><center>
+<font face="Arial, Helvetica" color="#000000">
+LeastSquares.py</font>
+</center></td></tr></table>
+<pre><span class="s0">#region imports</span>
+<span class="s2">import </span><span class="s1">numpy </span><span class="s2">as </span><span class="s1">np</span>
+<span class="s2">import </span><span class="s1">matplotlib</span><span class="s3">.</span><span class="s1">pyplot </span><span class="s2">as </span><span class="s1">pyplot</span>
+<span class="s2">from </span><span class="s1">math </span><span class="s2">import </span><span class="s3">*</span>
+<span class="s0">#endregion</span>
+
+<span class="s0">#region class definitions</span>
+<span class="s2">class </span><span class="s1">LeastSquaresFit_Class</span><span class="s3">():</span>
+    <span class="s2">def </span><span class="s1">__init__</span><span class="s3">(</span><span class="s1">self</span><span class="s3">, </span><span class="s1">xdata</span><span class="s3">=</span><span class="s2">None</span><span class="s3">, </span><span class="s1">ydata</span><span class="s3">=</span><span class="s2">None</span><span class="s3">):</span>
+        <span class="s1">self</span><span class="s3">.</span><span class="s1">x</span><span class="s3">=</span><span class="s1">xdata </span><span class="s2">if </span><span class="s1">xdata </span><span class="s2">is not None else </span><span class="s1">np</span><span class="s3">.</span><span class="s1">array</span><span class="s3">([])</span>
+        <span class="s1">self</span><span class="s3">.</span><span class="s1">y</span><span class="s3">=</span><span class="s1">ydata </span><span class="s2">if </span><span class="s1">ydata </span><span class="s2">is not None else </span><span class="s1">np</span><span class="s3">.</span><span class="s1">array</span><span class="s3">([])</span>
+        <span class="s1">self</span><span class="s3">.</span><span class="s1">coeffs</span><span class="s3">=</span><span class="s1">np</span><span class="s3">.</span><span class="s1">array</span><span class="s3">([])</span>
+
+    <span class="s2">def </span><span class="s1">RSquared</span><span class="s3">(</span><span class="s1">self</span><span class="s3">, </span><span class="s1">a</span><span class="s3">):</span>
+        <span class="s4">''' 
+        To calculate the R**2 value for a set of x,y data and a LeastSquares fit with polynomial having coefficients a 
+        :param x: array of actual x data 
+        :param y: array of actual y data 
+        :param a:  the coefficients of the polynomial fit 
+        :return: 
+        '''</span>
+        <span class="s1">AvgY</span><span class="s3">=</span><span class="s1">np</span><span class="s3">.</span><span class="s1">mean</span><span class="s3">(</span><span class="s1">self</span><span class="s3">.</span><span class="s1">y</span><span class="s3">) </span><span class="s0">#calculates the average value of y</span>
+        <span class="s1">SSTot</span><span class="s3">=</span><span class="s5">0</span>
+        <span class="s1">SSRes</span><span class="s3">=</span><span class="s5">0</span>
+        <span class="s2">for </span><span class="s1">i </span><span class="s2">in </span><span class="s1">range</span><span class="s3">(</span><span class="s1">len</span><span class="s3">(</span><span class="s1">self</span><span class="s3">.</span><span class="s1">y</span><span class="s3">)):</span>
+            <span class="s1">SSTot</span><span class="s3">+=(</span><span class="s1">self</span><span class="s3">.</span><span class="s1">y</span><span class="s3">[</span><span class="s1">i</span><span class="s3">]-</span><span class="s1">AvgY</span><span class="s3">)**</span><span class="s5">2</span>
+            <span class="s1">SSRes</span><span class="s3">+=(</span><span class="s1">self</span><span class="s3">.</span><span class="s1">y</span><span class="s3">[</span><span class="s1">i</span><span class="s3">]-</span><span class="s1">self</span><span class="s3">.</span><span class="s1">Poly</span><span class="s3">(</span><span class="s1">self</span><span class="s3">.</span><span class="s1">x</span><span class="s3">[</span><span class="s1">i</span><span class="s3">],</span><span class="s1">a</span><span class="s3">))**</span><span class="s5">2</span>
+        <span class="s1">RSq</span><span class="s3">=</span><span class="s5">1</span><span class="s3">-</span><span class="s1">SSRes</span><span class="s3">/</span><span class="s1">SSTot</span>
+        <span class="s2">return </span><span class="s1">RSq</span>
+
+    <span class="s2">def </span><span class="s1">Poly</span><span class="s3">(</span><span class="s1">self</span><span class="s3">,</span><span class="s1">xval</span><span class="s3">, </span><span class="s1">a</span><span class="s3">):</span>
+        <span class="s4">&quot;&quot;&quot; 
+        calculates the value for a polynomial given a value for x and the coefficients of the polynomial. 
+        f(x)=y=a[0]*x**(n-1)+a[1]*x**(n-2)+...+a[n], where n=len(a) 
+        :param a:  the coefficients for an n-1 order polynomial it 
+        :return: the value of the fit at xval 
+        &quot;&quot;&quot;</span>
+        <span class="s1">p</span><span class="s3">=</span><span class="s1">np</span><span class="s3">.</span><span class="s1">poly1d</span><span class="s3">(</span><span class="s1">a</span><span class="s3">)</span>
+        <span class="s2">return </span><span class="s1">p</span><span class="s3">(</span><span class="s1">xval</span><span class="s3">)</span>
+
+    <span class="s2">def </span><span class="s1">LeastSquares</span><span class="s3">(</span><span class="s1">self</span><span class="s3">, </span><span class="s1">power</span><span class="s3">):</span>
+        <span class="s4">&quot;&quot;&quot; 
+        Uses polyfit from numpy.  See that documentation. 
+        :param power: 
+        :return: 
+        &quot;&quot;&quot;</span>
+        <span class="s1">self</span><span class="s3">.</span><span class="s1">coeffs</span><span class="s3">=</span><span class="s1">np</span><span class="s3">.</span><span class="s1">polyfit</span><span class="s3">(</span><span class="s1">self</span><span class="s3">.</span><span class="s1">x</span><span class="s3">, </span><span class="s1">self</span><span class="s3">.</span><span class="s1">y</span><span class="s3">, </span><span class="s1">power</span><span class="s3">)</span>
+        <span class="s2">return </span><span class="s1">self</span><span class="s3">.</span><span class="s1">coeffs</span>
+
+    <span class="s2">def </span><span class="s1">GetCoeffsString</span><span class="s3">(</span><span class="s1">self</span><span class="s3">):</span>
+        <span class="s4">&quot;&quot;&quot; 
+        Get output of coefficients as a formatted string. 
+        :return: a formatted string of the coefficients that is comma delimited. 
+        &quot;&quot;&quot;</span>
+        <span class="s1">s</span><span class="s3">=</span><span class="s6">''</span>
+        <span class="s1">n</span><span class="s3">=</span><span class="s5">0</span>
+        <span class="s2">for </span><span class="s1">c </span><span class="s2">in </span><span class="s1">self</span><span class="s3">.</span><span class="s1">coeffs</span><span class="s3">:</span>
+            <span class="s1">s </span><span class="s3">+= (</span><span class="s6">'' </span><span class="s2">if </span><span class="s1">n </span><span class="s3">== </span><span class="s5">0 </span><span class="s2">else </span><span class="s6">', '</span><span class="s3">)+</span><span class="s6">&quot;{:0.4f}&quot;</span><span class="s3">.</span><span class="s1">format</span><span class="s3">(</span><span class="s1">c</span><span class="s3">)</span>
+            <span class="s1">n </span><span class="s3">+= </span><span class="s5">1</span>
+        <span class="s2">return </span><span class="s1">s</span>
+
+    <span class="s2">def </span><span class="s1">GetPlotInfo</span><span class="s3">(</span><span class="s1">self</span><span class="s3">, </span><span class="s1">power</span><span class="s3">, </span><span class="s1">npoints</span><span class="s3">=</span><span class="s5">500</span><span class="s3">):</span>
+        <span class="s1">Xmin </span><span class="s3">= </span><span class="s1">min</span><span class="s3">(</span><span class="s1">self</span><span class="s3">.</span><span class="s1">x</span><span class="s3">)</span>
+        <span class="s1">Xmax </span><span class="s3">= </span><span class="s1">max</span><span class="s3">(</span><span class="s1">self</span><span class="s3">.</span><span class="s1">x</span><span class="s3">)</span>
+        <span class="s1">Ymin </span><span class="s3">= </span><span class="s1">min</span><span class="s3">(</span><span class="s1">self</span><span class="s3">.</span><span class="s1">y</span><span class="s3">)</span>
+        <span class="s1">Ymax </span><span class="s3">= </span><span class="s1">max</span><span class="s3">(</span><span class="s1">self</span><span class="s3">.</span><span class="s1">y</span><span class="s3">)</span>
+        <span class="s1">dX </span><span class="s3">= </span><span class="s5">1.0 </span><span class="s3">* (</span><span class="s1">Xmax </span><span class="s3">- </span><span class="s1">Xmin</span><span class="s3">) / </span><span class="s1">npoints</span>
+
+        <span class="s1">a </span><span class="s3">= </span><span class="s1">self</span><span class="s3">.</span><span class="s1">LeastSquares</span><span class="s3">(</span><span class="s1">power</span><span class="s3">)</span>
+
+        <span class="s1">xvals </span><span class="s3">= []</span>
+        <span class="s1">yvals </span><span class="s3">= []</span>
+        <span class="s2">for </span><span class="s1">i </span><span class="s2">in </span><span class="s1">range</span><span class="s3">(</span><span class="s1">npoints</span><span class="s3">):</span>
+            <span class="s1">xvals</span><span class="s3">.</span><span class="s1">append</span><span class="s3">(</span><span class="s1">Xmin </span><span class="s3">+ </span><span class="s1">i </span><span class="s3">* </span><span class="s1">dX</span><span class="s3">)</span>
+            <span class="s1">yvals</span><span class="s3">.</span><span class="s1">append</span><span class="s3">(</span><span class="s1">self</span><span class="s3">.</span><span class="s1">Poly</span><span class="s3">(</span><span class="s1">xvals</span><span class="s3">[</span><span class="s1">i</span><span class="s3">], </span><span class="s1">a</span><span class="s3">))</span>
+        <span class="s1">RSq </span><span class="s3">= </span><span class="s1">self</span><span class="s3">.</span><span class="s1">RSquared</span><span class="s3">(</span><span class="s1">a</span><span class="s3">)</span>
+        <span class="s2">return </span><span class="s1">xvals</span><span class="s3">,</span><span class="s1">yvals</span><span class="s3">,</span><span class="s1">RSq</span>
+<span class="s0">#endregion</span></pre>
+</body>
+</html>
